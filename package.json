@@ -1,0 +1,12 @@
+{
+  "name": "mineflayer-lumberjack",
+  "version": "0.0.1",
+  "description": "mineflayer plugin which adds lumberjack abilities",
+  "main": "lumberjack.js",
+  "author": "Kent Karlsson",
+  "license": "BSD",
+  "dependencies": {
+    "mineflayer": "*",
+    "mineflayer-navigate": "*"
+  }
+}
