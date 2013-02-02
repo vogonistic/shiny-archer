@@ -229,136 +229,6 @@ function inject(bot) {
     return matches.sort(function(a, b) { return b.position.y - a.position.y; });
   }
   
-
-  // function looksAtOld(entity) {
-  //   var vec = mineflayer.vec3(-Math.cos(entity.pitch) * Math.sin(entity.yaw), Math.sin(entity.pitch), -Math.cos(entity.pitch) * Math.cos(entity.yaw));
-  //   var start = entity.position.offset(0, entity.height, 0);
-  //   
-  //   var length = 0.0;
-  //   var ray = start;
-  //   var lastPosF = start.floored();
-  //   var block = bot.blockAt(start);
-  //   // console.log(player+' is looking at '+vec+' start:'+start+' of type: '+block.displayName);
-  // 
-  //   var tests = 0
-  //   while (block.boundingBox == 'empty') {
-  //     tests += 1;
-  //     length += 0.1;
-  //     ray = start.plus(vec.scaled(length));
-  //     nextPosF = ray.floored();
-  //     if (!nextPosF.equals(lastPosF)) {
-  //       block = bot.blockAt(ray);
-  //       lastPosF = nextPosF;
-  //       // console.log(' - '+nextPosF+' is a '+block.displayName)
-  //     }
-  //   }
-  // 
-  //   // console.log('Found in '+tests+' tests')
-  //   return block;
-  // }
-  
-  function entityLookVector(entity) {
-    return mineflayer.vec3(
-      -Math.cos(entity.pitch) * Math.sin(entity.yaw),
-      Math.sin(entity.pitch),
-      -Math.cos(entity.pitch) * Math.cos(entity.yaw)
-    );
-  }
-  
-  function looksAt(entity) {
-    var vec = entityLookVector(entity);
-    var start = entity.position.offset(0, entity.height, 0);
-    
-    var length = 0.0;
-    var block = bot.blockAt(start);
-    // console.log(block.position)
-    // console.log(player+' is looking '+vec+' start:'+start+' of type: '+block.displayName);
-    var vecOffset = mineflayer.vec3(
-      (vec.x > 0 ? 1 : 0),
-      (vec.y > 0 ? 1 : 0),
-      (vec.z > 0 ? 1 : 0)
-    )
-
-    // 5
-    // var vecAbs = vec.abs();
-    // 6
-    invertedVec = mineflayer.vec3(
-      1.0 / Math.abs(vec.x),
-      1.0 / Math.abs(vec.y),
-      1.0 / Math.abs(vec.z)
-    );
-    
-    
-    var lastPos = start;
-    var tests = 0;
-    while (block.boundingBox == 'empty') {
-      tests += 1;
-      // 1 - 530ms
-      // var nextBoundries = mineflayer.vec3(
-      //   lastPos.x + (vec.x > 0 ? 1 : 0),
-      //   lastPos.y + (vec.y > 0 ? 1 : 0),
-      //   lastPos.z + (vec.z > 0 ? 1 : 0)
-      // );
-      // var diff = nextBoundries.floored().minus(lastPos).abs();
-      // 2 - 482ms
-      // var diff = lastPos.plus(vecOffset).floored().minus(lastPos).abs();
-      // 3 - 475ms
-      // var diff = mineflayer.vec3(
-      //   vec.x > 0 ? 1 + Math.floor(lastPos.x) - lastPos.x : lastPos.x - Math.floor(lastPos.x),
-      //   vec.y > 0 ? 1 + Math.floor(lastPos.y) - lastPos.y : lastPos.y - Math.floor(lastPos.y),
-      //   vec.z > 0 ? 1 + Math.floor(lastPos.z) - lastPos.z : lastPos.z - Math.floor(lastPos.z)        
-      // )
-      // 4 - 487ms
-      // var lastPosF = lastPos.floored()
-      // var diff = mineflayer.vec3(
-      //   vec.x > 0 ? 1 + lastPosF.x - lastPos.x : lastPos.x - lastPosF.x,
-      //   vec.y > 0 ? 1 + lastPosF.y - lastPos.y : lastPos.y - lastPosF.y,
-      //   vec.z > 0 ? 1 + lastPosF.z - lastPos.z : lastPos.z - lastPosF.z        
-      // )
-      // 5
-      // var diff = mineflayer.vec3(
-      //   Math.abs(Math.floor(lastPos.x + vecOffset.x) - lastPos.x),
-      //   Math.abs(Math.floor(lastPos.y + vecOffset.y) - lastPos.y),
-      //   Math.abs(Math.floor(lastPos.z + vecOffset.z) - lastPos.z)
-      // )
-      //     
-      // var normVec = vec_div(diff, vecAbs);
-      // 6
-      var normVec = mineflayer.vec3(
-        Math.abs(Math.floor(lastPos.x + vecOffset.x) - lastPos.x) * invertedVec.x,
-        Math.abs(Math.floor(lastPos.y + vecOffset.y) - lastPos.y) * invertedVec.y,
-        Math.abs(Math.floor(lastPos.z + vecOffset.z) - lastPos.z) * invertedVec.z
-      )
-      
-      // console.log(' - curr:'+lastPos+' diff:'+diff+' normVec:'+normVec);
-      
-      var dir = vec_min_point(normVec);
-      length += normVec[dir] + 0.001;
-      lastPos = start.plus(vec.scaled(length));
-      block = bot.blockAt(lastPos);
-      
-      // console.log(' - dir:'+dir+' length:'+length+' ('+normVec[dir]+') newPos:'+lastPos+' b:'+block.position+' '+block.displayName)
-      // console.log(' - '+block.position+' is a '+block.displayName)
-      // console.log('')
-      
-      // inverted faces since we want the face coming in
-      var face = -1;
-      switch(dir) {
-        case 'y': face = (vec.y < 0 ? 1 : 0); break;
-        case 'z': face = (vec.z < 0 ? 3 : 2); break;
-        case 'x': face = (vec.x < 0 ? 5 : 4); break;
-      }
-    }
-    
-    // console.log('Found in '+tests+' tests')
-    return {
-      'position':lastPos,
-      'block':block,
-      'face':face
-    };
-  };
-  // looksAt('vogonistic')
-  
   bot.lumberjack.slayTree = slayTree;
   function slayTree(treeBlocks, callback) {
     callback = callback || noop;
@@ -386,13 +256,14 @@ function inject(bot) {
 
   bot.lumberjack.doubleTake = doubleTake;
   function doubleTake(point) {
-    bot.lookAt(point.offset(0.5,0.5,0.5));
-    var block = bot.looksAt(bot.username).block;
-    console.log('asked for '+point+' and got '+block.position+' which is '+block.name+' ('+point.equals(block.position)+')')
+    bot.lookAt(point);
+    var looksAtData = bot.entity.looksAt();
+    var block = looksAtData.block;
+    console.log('asked for '+point.floored()+' and got '+block.position+' which is '+block.name+' ('+point.floored().equals(block.position)+')')
   }
   
   function breakThatTree() {
-    var lookAtData = bot.looksAt(bot.players.vogonistic.entity);
+    var lookAtData = bot.players.vogonistic.entity.looksAt();
     var block = lookAtData.block;
     
     if (block.name === 'log') {
@@ -581,21 +452,6 @@ function inject(bot) {
   // }, 2000);
   
   function tellMe() {
-    // 0: (0, 0, -1)    == north
-    // PI/2: (-1, 0, 0) == west
-    // PI: (0, 0, 1)    == south
-    // 3PI/2: (1, 0, 0) == east
-    
-    // bot.look(0, bot.entity.pitch);
-    // var lookVector = entityLookVector(bot.entity);
-    // console.log('0: '+lookVector);
-    // bot.look(Math.PI / 2.0, bot.entity.pitch);
-    // console.log('PI/2: '+entityLookVector(bot.entity));
-    // bot.look(Math.PI, bot.entity.pitch);
-    // console.log('PI: '+entityLookVector(bot.entity));
-    // bot.look(Math.PI * 1.5, bot.entity.pitch);
-    // console.log('3PI/2: '+entityLookVector(bot.entity));
-    
     // 0 == north, PI/2 == west, PI == south, 3PI/2 == east
     // add a 16th of PI and ensure yaw is within: 0 <= yaw <= 2PI
     var yaw = ((bot.entity.yaw + (Math.PI / 16)) % (Math.PI*2));
@@ -610,7 +466,6 @@ function inject(bot) {
   bot.lumberjack.splitVeins = splitVeins;
   bot.lumberjack.scan = scan;
   bot.lumberjack.findNearbyTrees = findNearbyTrees;
-  bot.looksAt = looksAt;
 
   mineflayer.vec3.Vec3.prototype.directionName = function() {
     var name = []
@@ -619,22 +474,6 @@ function inject(bot) {
     if (this.x != 0) name.push(this.x > 0 ? 'east' : 'west')
     return name.join('-');
   }
-
-  vec_min_point = function(vec) {
-    var minValue = Math.min(vec.x, vec.y, vec.z);
-    switch(minValue) {
-      case vec.x: return 'x';
-      case vec.y: return 'y';
-      case vec.z: return 'z';
-    }
-  }
-
-  vec_mult = function(left, scalar_vec) {
-    return mineflayer.vec3(left.x * scalar_vec.x, left.y * scalar_vec.y, left.z * scalar_vec.z);
-  };
-  vec_div = function(left, scalar_vec) {
-    return mineflayer.vec3(left.x / scalar_vec.x, left.y / scalar_vec.y, left.z / scalar_vec.z);
-  };
 
   return bot;
 }

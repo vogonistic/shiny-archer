@@ -42,6 +42,9 @@ bot.navigate.on('stop', function() {
 require('./lumberjack.js')(mineflayer)(bot);
 require('./repl.js')(mineflayer)(bot);
 
+require('./extend.js')(mineflayer)(bot);
+
+
 // bot.on('blockUpdate', function(oldBlock, newBlock) {
 //   // if (!oldBlock || !newBlock) {
 //   //   console.log('newBlock or oldBlock is undefined!')
