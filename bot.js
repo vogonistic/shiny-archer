@@ -52,7 +52,7 @@ require('./extend.js')(mineflayer)(bot);
 //   //   console.dir(newBlock);
 //   //   console.trace();
 //   // }
-//   // 
+//   //
 //   var ignoredNames = ['snow', 'tallgrass', 'grass', 'leaves']
 //   var isIgnoredBlockType = ignoredNames.some(function(name) { return name === newBlock.name || name === oldBlock.name });
 //   // var isSameType = (oldBlock.type === newBlock.type);

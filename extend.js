@@ -75,16 +75,16 @@ function inject(mineflayer, bot) {
       1.0 / Math.abs(lookVec.x),
       1.0 / Math.abs(lookVec.y),
       1.0 / Math.abs(lookVec.z)
-    );    
+    );
     
     // early declaration of variables apparently help
     var lastPos = start;
-    var normVec = null;
+    var edgeDistanceVec = null;
     var dir = 'x';
     var face = -1;
     
     var tests = 0;
-    while (block.boundingBox == 'empty' && (++tests) < 100) {
+    while (block.boundingBox === 'empty' && (++tests) < 100) {
       // calculate the distance to the next block for x, y and z
       edgeDistanceVec = new Vec3(
         Math.abs(Math.floor(lastPos.x + vecOffset.x) - lastPos.x) * invertedVec.x,
@@ -113,6 +113,6 @@ function inject(mineflayer, bot) {
       'position':lastPos,
       'block':block,
       'face':face
-    };
-  };
+    }
+  }
 }
