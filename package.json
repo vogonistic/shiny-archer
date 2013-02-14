@@ -1,5 +1,5 @@
 {
-  "name": "mineflayer-lumberjack",
+  "name": "shiny-archer",
   "version": "0.0.1",
   "description": "mineflayer plugin which adds lumberjack abilities",
   "main": "lumberjack.js",
@@ -7,6 +7,7 @@
   "license": "BSD",
   "dependencies": {
     "mineflayer": "*",
-    "mineflayer-navigate": "*"
+    "mineflayer-navigate": "*",
+    "mineflayer-voxel": "*"
   }
 }

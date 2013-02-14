@@ -41,9 +41,8 @@ bot.navigate.on('stop', function() {
 
 require('./lumberjack.js')(mineflayer)(bot);
 require('./repl.js')(mineflayer)(bot);
-
 require('./extend.js')(mineflayer)(bot);
-
+require('mineflayer-voxel')(mineflayer)(bot, {port: 8080});
 
 // bot.on('blockUpdate', function(oldBlock, newBlock) {
 //   // if (!oldBlock || !newBlock) {
